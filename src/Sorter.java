@@ -13,18 +13,56 @@ public class Sorter {
         System.out.println();
     }
 
-    public static void main (String[] args) throws IOException{
-        getIntro();
-        Scanner consoleInp= new Scanner(System.in);
-        System.out.print("input file name? ");
-        Scanner input = new Scanner(new File(consoleInp.nextLine()));
-        System.out.println("output file name? ");
-        PrintStream myWriter = new PrintStream(new File(consoleInp.nextLine()));
+    public static void writePersonalities(int[] perc, PrintStream myWriter){
+        myWriter.print("[" + perc[0] + ", " + perc[1] + ", " + perc[2] + ", " + perc[3] + "] = ");
+        if(perc[0] > 50){
+            myWriter.print("I");
+        }
+        else if(perc[0] < 50){
+            myWriter.print("E");
+        }
+        else{
+            myWriter.print("X");
+        }
+        if(perc[1] > 50){
+            myWriter.print("N");
+        }
+        else if(perc[1] < 50){
+            myWriter.print("S");
+        }
+        else{
+            myWriter.print("X");
+        }
+        if(perc[2] > 50){
+            myWriter.print("F");
+        }
+        else if(perc[2] < 50){
+            myWriter.print("T");
+        }
+        else{
+            myWriter.print("X");
+        }
+        if(perc[3] > 50){
+            myWriter.print("P" + "\n");
+        }
+        else if(perc[3] < 50){
+            myWriter.print("J" + "\n");
+        }
+        else{
+            myWriter.print("X" + "\n");
+        }
+    }
 
+    public static int getPercentages(double b, double size){
+        double perc_b = b/size;
+        return (int) Math.round(perc_b * 100);
+    }
+
+    public static void writeSolution(Scanner input, PrintStream myWriter){
         int i = 0;
         String line;
-        while(input.hasNextLine()){
-            line=input.nextLine();
+        while(input.hasNextLine()) {
+            line = input.nextLine();
             double b_e = 0;
             double b_n = 0;
             double b_f = 0;
@@ -33,19 +71,17 @@ public class Sorter {
             double size_2 = 20;
             double size_3 = 20;
             double size_4 = 20;
-            if(i%2==0) {
+            if (i % 2 == 0) {
                 myWriter.print(line + ": ");
-            }
-            else{
-                System.out.println("here");
+            } else {
+//                System.out.println("here");
                 int[] perc = new int[DIMENSIONS];
-                for(int j = 0; j < line.length(); j++) {
-
-                    Character c = line.charAt(j);
-                    Character b = 'b';
-                    Character B = 'B';
-                    Character dash = '-';
-                    if (c.equals(b) || (c.equals(B))) {
+                for (int j = 0; j < line.length(); j++) {
+                    char c = line.charAt(j);
+                    char b = 'b';
+                    char B = 'B';
+                    char dash = '-';
+                    if ((c == b) || (c == B)) {
                         if (j % 7 == 0) {
                             b_e++;
 
@@ -58,8 +94,7 @@ public class Sorter {
                         } else {
                             b_p++;
                         }
-                    }
-                    else if(c.equals(dash)){
+                    } else if (c== dash) {
                         if (j % 7 == 0) {
                             size_1--;
 
@@ -74,66 +109,26 @@ public class Sorter {
                         }
                     }
                 }
-                double perc_b = b_e/size_1 * 100;
-
-                int write_b = (int) Math.round(perc_b);
-                perc[0] = write_b;
-
-
-                perc_b = b_n/size_2 * 100;
-                write_b = (int) Math.round(perc_b);
-                perc[1] = write_b;
-
-
-                perc_b = b_f/size_3 * 100;
-                write_b = (int) Math.round(perc_b);
-                perc[2] = write_b;
-
-
-                perc_b = b_p/size_4 * 100;
-                write_b = (int) Math.round(perc_b);
-                perc[3] = write_b;
-                myWriter.print("[" + perc[0] + ", " + perc[1] + ", " + perc[2] + ", " + perc[3] + "] = ");
-                if(perc[0] > 50){
-                    myWriter.print("I");
-                }
-                else if(perc[0] < 50){
-                    myWriter.print("E");
-                }
-                else{
-                    myWriter.print("X");
-                }
-                if(perc[1] > 50){
-                    myWriter.print("N");
-                }
-                else if(perc[1] < 50){
-                    myWriter.print("S");
-                }
-                else{
-                    myWriter.print("X");
-                }
-                if(perc[2] > 50){
-                    myWriter.print("F");
-                }
-                else if(perc[2] < 50){
-                    myWriter.print("T");
-                }
-                else{
-                    myWriter.print("X");
-                }
-                if(perc[3] > 50){
-                    myWriter.print("P" + "\n");
-                }
-                else if(perc[3] < 50){
-                    myWriter.print("J" + "\n");
-                }
-                else{
-                    myWriter.print("X" + "\n");
-                }
+                perc[0] = getPercentages(b_e, size_1);
+                perc[1] = getPercentages(b_n, size_2);
+                perc[2] = getPercentages(b_f, size_3);
+                perc[3] = getPercentages(b_p, size_4);
+                writePersonalities(perc, myWriter);
             }
-            System.out.println(line + i);
-            i+=1;
+            i += 1;
         }
+    }
+
+
+
+    public static void main (String[] args) throws IOException{
+        getIntro();
+        Scanner consoleInp= new Scanner(System.in);
+        System.out.print("input file name? ");
+        Scanner input = new Scanner(new File(consoleInp.nextLine()));
+        System.out.println("output file name? ");
+        PrintStream myWriter = new PrintStream(new File(consoleInp.nextLine()));
+        writeSolution(input, myWriter);
         myWriter.close();
     }
 }
